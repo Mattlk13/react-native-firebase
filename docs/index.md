@@ -11,7 +11,7 @@ React Native Firebase is the officially recommended collection of packages that 
 Before getting started, the documentation assumes you are able to create a project with React Native and that you have an active Firebase project.
 If you do not meet these prerequisites, follow the links below:
 
-- [Getting started with React Native](https://facebook.github.io/react-native/docs/getting-started.html)
+- [React Native - Setting up the development environment](https://reactnative.dev/docs/environment-setup)
 - [Create a new Firebase project](https://console.firebase.google.com/)
 
 ## Installation
@@ -45,8 +45,9 @@ local projects package name which can be found inside of the `manifest` tag with
 file within your project.
 
 > The debug signing certificate is optional to use Firebase with your app, but is required for Dynamic Links, Invites and Phone Authentication.
-> To generate a certificate run `cd android && ./gradlew signingReport` and copy the SHA1 from the `debug` key. This generates two variant keys.
-> You can copy the 'SHA1' that belongs to the `debugAndroidTest` variant key option.
+> To generate a certificate run `cd android && ./gradlew signingReport`. This generates two variant keys.
+> You have to copy both 'SHA1' and 'SHA-256' keys that belong to the 'debugAndroidTest' variant key option.
+> Then, you can add those keys to the 'SHA certificate fingerprints' on your app in Firebase console.
 
 Download the `google-services.json` file and place it inside of your project at the following location: `/android/app/google-services.json`.
 
@@ -61,7 +62,7 @@ First, add the `google-services` plugin as a dependency inside of your `/android
 buildscript {
   dependencies {
     // ... other dependencies
-    classpath 'com.google.gms:google-services:4.3.8'
+    classpath 'com.google.gms:google-services:4.3.10'
     // Add me --- /\
   }
 }
@@ -112,9 +113,7 @@ Within your existing `didFinishLaunchingWithOptions` method, add the following t
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   // Add me --- \/
-  if ([FIRApp defaultApp] == nil) {
-    [FIRApp configure];
-  }
+  [FIRApp configure];
   // Add me --- /\
   // ...
 }
@@ -193,7 +192,7 @@ project.ext {
       // Overriding Library SDK Versions
       firebase: [
         // Override Firebase SDK Version
-        bom           : "28.0.1"
+        bom           : "28.3.1"
       ],
     ],
   ])
@@ -208,7 +207,7 @@ Open your projects `/ios/Podfile` and add any of the globals shown below to the 
 
 ```ruby
 # Override Firebase SDK Version
-$FirebaseSDKVersion = '8.0.0'
+$FirebaseSDKVersion = '8.5.0'
 ```
 
 Once changed, reinstall your projects pods via pod install and rebuild your project with `npx react-native run-ios`.
@@ -281,8 +280,8 @@ The `app.json` for integration that included the optional crashlytics and perfor
       "googleServicesFile": "./GoogleService-Info.plist"
     },
     "plugins": [
-      "@react-native-firebase/app"
-      "@react-native-firebase/perf"
+      "@react-native-firebase/app",
+      "@react-native-firebase/perf",
       "@react-native-firebase/crashlytics"
     ]
   }

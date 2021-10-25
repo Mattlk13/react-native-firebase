@@ -6,6 +6,8 @@ Analytics
 analytics
 APIs
 APIs.
+AppAttest
+AppCheck
 APNs
 AirPods
 async
@@ -29,6 +31,7 @@ barcodes
 BUGFIX
 CarPlay
 Changelog
+checkForUpdate
 CLI
 CocoaPods
 codebase
@@ -42,7 +45,10 @@ Deprecations
 Detox
 DEVEX
 Diarmid
+Distribution
+DeviceCheck
 dropdown
+e2e
 EEA
 Ehesp
 enum
@@ -51,10 +57,13 @@ Fastlane
 FCM
 firebase
 Firebase
+FirebaseApp
 firebase-ios-sdk
 Firestore
 getIdToken
 GDPR
+GDPR-compliant
+github
 globals
 Gradle
 gradle
@@ -64,6 +73,7 @@ HTTP
 HTTPS
 IDFA
 installable
+integrations
 IntelliSense
 Interstitials
 interstitials
@@ -72,6 +82,7 @@ invertase
 iOS
 iOS13
 IPs
+isTesterSignedIn
 Javascript
 javascript
 JS
@@ -90,6 +101,7 @@ namespaced
 natively
 NDK
 Node.js
+non-firebase
 NoSQL
 Notifee
 NPE
@@ -104,6 +116,7 @@ personalization
 Podfile
 plist
 pre-fetched
+pre-release
 pre-rendered
 preflight
 preloaded
@@ -121,6 +134,7 @@ RN60
 RN61
 RNFB
 RNFirebase
+SafetyNet
 Salakar
 scalable
 scrollable
@@ -131,8 +145,10 @@ SDKs.
 serverless
 setBackgroundMessageHandler
 SHA1
+SHA
 SHA-256
 SIGABRT
+signInTester
 Siri
 SMS
 src
@@ -150,6 +166,7 @@ uid
 uncomment
 unhandled
 unsubscriber
+untampered
 utils
 Utils
 v5

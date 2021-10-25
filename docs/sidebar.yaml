@@ -23,6 +23,14 @@
     - - Building an Analytics Funnel
       - 'https://blog.theodo.com/2018/01/building-google-analytics-funnel-firebase-react-native'
   - '//static.invertase.io/assets/firebase/analytics.svg'
+- - App Check
+  - - - Usage
+      - '/app-check/usage'
+  - '//static.invertase.io/assets/social/firebase-logo.png'
+- - App Distribution
+  - - - Usage
+      - '/app-distribution/usage'
+  - '/assets/docs/app-distribution/app-distribution.png'
 - - Authentication
   - - - Usage
       - '/auth/usage'
@@ -93,6 +101,10 @@
   - - - Usage
       - '/in-app-messaging/usage'
   - '//static.invertase.io/assets/firebase/in-app-messaging.svg'
+- - Installations
+  - - - Usage
+      - '/installations/usage'
+  - '//static.invertase.io/assets/social/firebase-logo.png'
 - - ML
   - - - Usage
       - '/ml/usage'
@@ -106,4 +118,6 @@
       - '/perf/usage'
     - - Axios Integration
       - '/perf/axios-integration'
+    - - KY Integration
+      - '/perf/ky-integration'
   - '//static.invertase.io/assets/firebase/performance-monitoring.svg'

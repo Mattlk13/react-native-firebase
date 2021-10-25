@@ -1,7 +1,11 @@
 import { ConfigPlugin, IOSConfig, withDangerousMod } from '@expo/config-plugins';
-import fs from 'fs/promises';
+import { mergeContents } from '@expo/config-plugins/build/utils/generateCode';
+import fs from 'fs';
 
 const methodInvocationBlock = `[FIRApp configure];`;
+// https://regex101.com/r/Imm3E8/1
+const methodInvocationLineMatcher =
+  /(?:(self\.|_)(\w+)\s?=\s?\[\[UMModuleRegistryAdapter alloc\])|(?:RCTBridge\s?\*\s?(\w+)\s?=\s?\[\[RCTBridge alloc\])/g;
 
 export function modifyObjcAppDelegate(contents: string): string {
   // Add import
@@ -13,17 +17,20 @@ export function modifyObjcAppDelegate(contents: string): string {
     );
   }
 
-  // Add invocation
-  if (!contents.includes(methodInvocationBlock)) {
-    // self.moduleRegistryAdapter = [[UMModuleRegistryAdapter alloc]
-    contents = contents.replace(
-      /self\.moduleRegistryAdapter = \[\[UMModuleRegistryAdapter alloc\]/g,
-      `${methodInvocationBlock}
-  self.moduleRegistryAdapter = [[UMModuleRegistryAdapter alloc]`,
-    );
+  // To avoid potential issues with existing changes from older plugin versions
+  if (contents.includes(methodInvocationBlock)) {
+    return contents;
   }
 
-  return contents;
+  // Add invocation
+  return mergeContents({
+    tag: '@react-native-firebase/app-didFinishLaunchingWithOptions',
+    src: contents,
+    newSrc: methodInvocationBlock,
+    anchor: methodInvocationLineMatcher,
+    offset: 0, // new line will be inserted right before matched anchor
+    comment: '//',
+  }).contents;
 }
 
 export const withFirebaseAppDelegate: ConfigPlugin = config => {
@@ -31,7 +38,7 @@ export const withFirebaseAppDelegate: ConfigPlugin = config => {
     'ios',
     async config => {
       const fileInfo = IOSConfig.Paths.getAppDelegate(config.modRequest.projectRoot);
-      let contents = await fs.readFile(fileInfo.path, 'utf-8');
+      let contents = await fs.promises.readFile(fileInfo.path, 'utf-8');
       if (fileInfo.language === 'objc') {
         contents = modifyObjcAppDelegate(contents);
       } else {
@@ -40,7 +47,7 @@ export const withFirebaseAppDelegate: ConfigPlugin = config => {
           `Cannot add Firebase code to AppDelegate of language "${fileInfo.language}"`,
         );
       }
-      await fs.writeFile(fileInfo.path, contents);
+      await fs.promises.writeFile(fileInfo.path, contents);
 
       return config;
     },

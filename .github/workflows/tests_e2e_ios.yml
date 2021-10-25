@@ -22,8 +22,8 @@ on:
 jobs:
   ios:
     name: iOS
-    runs-on: macos-latest
-    # TODO matrix across APIs, at least 10 and 13 (lowest to highest)
+    runs-on: macos-11
+    # TODO matrix across APIs, at least 11 and 15 (lowest to highest)
     timeout-minutes: 60
     env:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -38,8 +38,6 @@ jobs:
           node-version: 14
 
       - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
 
       - uses: actions/checkout@v2
         with:
@@ -83,6 +81,11 @@ jobs:
           max_attempts: 3
           command: yarn --no-audit --prefer-offline
 
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3
+
       - name: Update Ruby build tools
         uses: nick-invision/retry@v2
         with:
@@ -102,8 +105,8 @@ jobs:
       - name: Pod Install
         uses: nick-invision/retry@v2
         with:
-          timeout_minutes: 2
-          retry_wait_seconds: 60
+          timeout_minutes: 10
+          retry_wait_seconds: 30
           max_attempts: 3
           command: yarn tests:ios:pod:install
 
@@ -127,9 +130,8 @@ jobs:
           ccache -s
           export SKIP_BUNDLING=1
           export RCT_NO_LAUNCH_PACKAGER=1
-          cd tests
           set -o pipefail
-          ./node_modules/.bin/detox build --configuration ios.sim.debug
+          yarn tests:ios:build
           ccache -s
         shell: bash
 
@@ -167,10 +169,8 @@ jobs:
         run: nohup sh -c "sleep 30 && xcrun simctl spawn booted log stream --level debug --style compact > simulator.log 2>&1 &"
 
       - name: Detox Test
-        timeout-minutes: 10
-        run: |
-          cd tests
-          ./node_modules/.bin/nyc ./node_modules/.bin/detox test --debug-synchronization 200 --configuration ios.sim.debug
+        timeout-minutes: 30
+        run: yarn tests:ios:test-cover
 
       - name: Compress Simulator Log
         if: always()
